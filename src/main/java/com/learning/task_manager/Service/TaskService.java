@@ -9,6 +9,7 @@ import javax.management.RuntimeErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.learning.task_manager.Enums.TaskStatus;
 import com.learning.task_manager.Model.Task;
 import com.learning.task_manager.Repository.TaskRepository;
 
@@ -21,14 +22,10 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     //Find a task using the task name
-    public Task findTask(String taskName){
-       Optional<Task> optionalTask = taskRepository.findByname(taskName);
-        if(optionalTask.isPresent()){
-            return optionalTask.get();
-        }
-        else{
-            throw new RuntimeException(taskName+" Not found");
-        }  
+    public Optional<Task> findTask(String taskName){
+
+        //this would give an object of Optional task
+    return taskRepository.findByname(taskName);
     }
 
 
@@ -37,6 +34,8 @@ public class TaskService {
     {
     //Setting the current time of task creation
      task.setCreatedAt(LocalDateTime.now());
+     //Set the default status as new
+     task.setStatus(TaskStatus.NEW.getStatus());
      return taskRepository.save(task);   
     }
 
